@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../models/buku_model.dart';
-import '../../repositories/buku_repository.dart';
+import '../models/buku_model.dart';
+import '../repositories/buku_repository.dart';
 import 'package:intl/intl.dart';
 
-class BookFormScreen extends StatefulWidget {
-  final Buku? book; // Null for add mode, contains data for edit mode
-  final VoidCallback? onBookAdded; // Callback when book is added
-
-  const BookFormScreen({super.key, this.book, this.onBookAdded});
+class AddBookScreen extends StatefulWidget {
+  const AddBookScreen({super.key});
 
   @override
-  State<BookFormScreen> createState() => BookFormScreenState();
+  State<AddBookScreen> createState() => _AddBookScreenState();
 }
 
-class BookFormScreenState extends State<BookFormScreen> {
+class _AddBookScreenState extends State<AddBookScreen> {
   final _formKey = GlobalKey<FormState>();
   final BukuRepository _bukuRepository = BukuRepository();
 
@@ -27,26 +24,14 @@ class BookFormScreenState extends State<BookFormScreen> {
   final _tanggalMasukController = TextEditingController();
 
   bool _isLoading = false;
-  bool get _isEditMode => widget.book != null;
 
   @override
   void initState() {
     super.initState();
-    if (_isEditMode) {
-      // Populate form with existing book data
-      _judulController.text = widget.book!.judul;
-      _penulisController.text = widget.book!.penulis;
-      _penerbitController.text = widget.book!.penerbit;
-      _hargaController.text = widget.book!.harga.toString();
-      _jumlahController.text = widget.book!.jumlah.toString();
-      _volumeController.text = widget.book!.volume.toString();
-      _tanggalMasukController.text = widget.book!.tanggalMasuk;
-    } else {
-      // Set default date to today for add mode
-      _tanggalMasukController.text = DateFormat(
-        'yyyy-MM-dd',
-      ).format(DateTime.now());
-    }
+    // Set default date to today
+    _tanggalMasukController.text = DateFormat(
+      'yyyy-MM-dd',
+    ).format(DateTime.now());
   }
 
   @override
@@ -70,7 +55,9 @@ class BookFormScreenState extends State<BookFormScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(primary: const Color(0xFFCFAB8D)),
+            colorScheme: ColorScheme.light(
+              primary: Theme.of(context).primaryColor,
+            ),
           ),
           child: child!,
         );
@@ -95,7 +82,6 @@ class BookFormScreenState extends State<BookFormScreen> {
 
     try {
       final buku = Buku(
-        id: _isEditMode ? widget.book!.id : null,
         judul: _judulController.text.trim(),
         penulis: _penulisController.text.trim(),
         penerbit: _penerbitController.text.trim(),
@@ -105,44 +91,34 @@ class BookFormScreenState extends State<BookFormScreen> {
         tanggalMasuk: _tanggalMasukController.text.trim(),
       );
 
-      if (_isEditMode) {
-        // Update existing book
-        await _bukuRepository.updateBuku(widget.book!.id!, buku);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Buku berhasil diperbarui'),
-              backgroundColor: Colors.green,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-          Navigator.of(context).pop(true); // Return true to indicate success
-        }
-      } else {
-        // Add new book
-        await _bukuRepository.insertBuku(buku);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Buku berhasil ditambahkan'),
-              backgroundColor: Colors.green,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
+      await _bukuRepository.insertBuku(buku);
 
-          // Notify parent and trigger callback
-          widget.onBookAdded?.call();
-        }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Buku berhasil ditambahkan'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+
+        // Clear form
+        _formKey.currentState!.reset();
+        _judulController.clear();
+        _penulisController.clear();
+        _penerbitController.clear();
+        _hargaController.clear();
+        _jumlahController.clear();
+        _volumeController.clear();
+        _tanggalMasukController.text = DateFormat(
+          'yyyy-MM-dd',
+        ).format(DateTime.now());
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              _isEditMode
-                  ? 'Gagal memperbarui buku: $e'
-                  : 'Gagal menambahkan buku: $e',
-            ),
+            content: Text('Gagal menambahkan buku: $e'),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
           ),
@@ -161,10 +137,7 @@ class BookFormScreenState extends State<BookFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: Text(_isEditMode ? 'Edit Buku Anasshn' : 'Tambah Buku Anasshn'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Tambah Buku Anasshn'), elevation: 0),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -175,7 +148,7 @@ class BookFormScreenState extends State<BookFormScreen> {
               // Header Card
               Card(
                 elevation: 0,
-                color: const Color(0xFFCFAB8D).withOpacity(0.1),
+                color: Theme.of(context).primaryColor.withOpacity(0.1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -186,7 +159,7 @@ class BookFormScreenState extends State<BookFormScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFCFAB8D),
+                          color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Icon(
@@ -196,12 +169,10 @@ class BookFormScreenState extends State<BookFormScreen> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      Expanded(
+                      const Expanded(
                         child: Text(
-                          _isEditMode
-                              ? 'Edit informasi buku di bawah ini'
-                              : 'Isi formulir di bawah untuk menambahkan buku baru',
-                          style: const TextStyle(
+                          'Isi formulir di bawah untuk menambahkan buku baru',
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),
@@ -361,7 +332,7 @@ class BookFormScreenState extends State<BookFormScreen> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _saveBook,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFCFAB8D),
+                    backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -377,14 +348,14 @@ class BookFormScreenState extends State<BookFormScreen> {
                             strokeWidth: 2,
                           ),
                         )
-                      : Row(
+                      : const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(_isEditMode ? Icons.save : Icons.add),
-                            const SizedBox(width: 8),
+                            Icon(Icons.save),
+                            SizedBox(width: 8),
                             Text(
-                              _isEditMode ? 'Perbarui Buku' : 'Simpan Buku',
-                              style: const TextStyle(
+                              'Simpan Buku',
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -394,51 +365,49 @@ class BookFormScreenState extends State<BookFormScreen> {
                 ),
               ),
 
-              if (!_isEditMode) ...[
-                const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-                // Reset Button (only in add mode)
-                SizedBox(
-                  height: 56,
-                  child: OutlinedButton(
-                    onPressed: _isLoading
-                        ? null
-                        : () {
-                            _formKey.currentState!.reset();
-                            _judulController.clear();
-                            _penulisController.clear();
-                            _penerbitController.clear();
-                            _hargaController.clear();
-                            _jumlahController.clear();
-                            _volumeController.clear();
-                            _tanggalMasukController.text = DateFormat(
-                              'yyyy-MM-dd',
-                            ).format(DateTime.now());
-                          },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.grey[700],
-                      side: BorderSide(color: Colors.grey[400]!),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.refresh),
-                        SizedBox(width: 8),
-                        Text(
-                          'Reset Form',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+              // Reset Button
+              SizedBox(
+                height: 56,
+                child: OutlinedButton(
+                  onPressed: _isLoading
+                      ? null
+                      : () {
+                          _formKey.currentState!.reset();
+                          _judulController.clear();
+                          _penulisController.clear();
+                          _penerbitController.clear();
+                          _hargaController.clear();
+                          _jumlahController.clear();
+                          _volumeController.clear();
+                          _tanggalMasukController.text = DateFormat(
+                            'yyyy-MM-dd',
+                          ).format(DateTime.now());
+                        },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.grey[700],
+                    side: BorderSide(color: Colors.grey[400]!),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.refresh),
+                      SizedBox(width: 8),
+                      Text(
+                        'Reset Form',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
 
               const SizedBox(height: 24),
             ],

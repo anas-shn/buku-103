@@ -2,6 +2,11 @@
 
 Aplikasi manajemen inventaris buku berbasis Flutter dengan Supabase sebagai backend. Aplikasi ini dilengkapi dengan sistem autentikasi yang aman dan antarmuka yang menarik.
 
+##    Author 
+-     Nama: Anas Sholihin
+-     NIM: H1D023103
+-     Shift: F - E
+
 ## ✨ Fitur
 
 ### 🔐 Authentication
@@ -181,22 +186,6 @@ dependencies:
 | created_at  | TIMESTAMP | Waktu dibuat               |
 | updated_at  | TIMESTAMP | Waktu update terakhir      |
 
-## 🔐 Security
-
-- ✅ Row Level Security (RLS) enabled
-- ✅ Environment variables untuk credentials
-- ✅ Password validation & strength check
-- ✅ Secure session management
-- ✅ API keys tidak di-commit ke git
-- ✅ Input sanitization & validation
-
-## 📖 Dokumentasi
-
-### Panduan Lengkap
-- 📘 [SETUP.md](SETUP.md) - Quick setup dalam 5 menit
-- 🔐 [README_AUTH.md](README_AUTH.md) - Authentication guide lengkap
-- 💾 [README_SUPABASE.md](README_SUPABASE.md) - Supabase setup & usage
-- 📊 [db.md](db.md) - Struktur database
 
 ### API Documentation
 
@@ -315,50 +304,6 @@ textTheme: GoogleFonts.robotoTextTheme(), // Ganti font
 ```
 
 Lihat [Google Fonts](https://fonts.google.com/) untuk pilihan font.
-
-## 📈 Roadmap
-
-### Phase 1: Authentication ✅
-- [x] Login & Register
-- [x] Logout
-- [x] Session management
-- [x] Beautiful UI
-
-### Phase 2: CRUD Buku (Next)
-- [ ] List buku
-- [ ] Tambah buku
-- [ ] Edit buku
-- [ ] Hapus buku
-- [ ] Search & filter
-
-### Phase 3: Advanced Features
-- [ ] Upload gambar buku
-- [ ] Barcode scanner
-- [ ] Export data (PDF/Excel)
-- [ ] Statistik & laporan
-- [ ] Dark mode
-- [ ] Multi-language support
-
-### Phase 4: Enhancement
-- [ ] Role-based access (Admin/User)
-- [ ] Kategori buku
-- [ ] Peminjaman buku
-- [ ] Notifikasi
-- [ ] Cloud backup
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 

@@ -189,7 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Profil'),
+        title: const Text('Profil Anasshn'),
         elevation: 0,
         actions: [
           if (!_isEditing)
