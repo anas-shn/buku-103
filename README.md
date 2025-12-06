@@ -10,7 +10,7 @@ Aplikasi manajemen inventaris buku berbasis Flutter dengan Supabase sebagai back
 ## ✨ Fitur
 
 ### Demo
-[Demo Aplikasi](https://github.com/anas-shn/buku-103/blob/main/docs/demo.gif)
+![Demo Aplikasi](https://github.com/anas-shn/buku-103/blob/main/docs/demo.gif)
 
 ### 🔐 Authentication
 - ✅ Register dengan Email, Password, dan Nama
