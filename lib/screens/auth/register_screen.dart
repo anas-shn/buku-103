@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventaris_103/screens/auth/login_screen.dart';
 import 'package:inventaris_103/services/auth_service.dart';
 import 'package:inventaris_103/widgets/custom_button.dart';
 import 'package:inventaris_103/widgets/custom_text_field.dart';
@@ -134,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Akun Anda berhasil dibuat.\nSelamat datang di Inventaris Buku!',
+                  'Akun Anda berhasil dibuat.\nSilakan login untuk melanjutkan.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -146,13 +147,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                 SizedBox(
                   width: double.infinity,
                   child: CustomButton(
-                    text: 'Mulai Sekarang',
+                    text: 'Login Sekarang',
                     onPressed: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => const MainNavigationScreen(),
-                        ),
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
                       );
                     },
                     height: 48,

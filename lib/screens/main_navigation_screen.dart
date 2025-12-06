@@ -37,35 +37,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: _screens),
-      // floatingActionButton: _currentIndex == 0
-      //     ? FloatingActionButton.extended(
-      //         onPressed: () {
-      //           setState(() {
-      //             _currentIndex = 1;
-      //           });
-      //         },
-      //         icon: const Icon(Icons.add),
-      //         label: const Text('Tambah Buku'),
-      //         backgroundColor: const Color(0xFFCFAB8D),
-      //         foregroundColor: Colors.white,
-      //         elevation: 4,
-      //       )
-      //     : null,
-      floatingActionButton: _currentIndex == 0
-          ? FloatingActionButton.extended(
-              onPressed: () {
-                setState(() {
-                  _currentIndex = 1;
-                });
-              },
-              icon: const Icon(Icons.add),
-              label: const Text('Tambah Buku'),
-              backgroundColor: const Color(0xFFCFAB8D),
-              foregroundColor: Colors.white,
-              elevation: 4,
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [

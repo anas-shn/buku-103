@@ -34,9 +34,10 @@ class AuthService {
       );
 
       if (response.user != null) {
-        // Save user info to SharedPreferences
-        await _saveUserInfo(name, email);
         debugPrint('✅ User signed up successfully: ${response.user!.email}');
+        // Sign out after registration so user needs to login
+        await _client.auth.signOut();
+        debugPrint('✅ User signed out after registration');
       }
 
       return response;
